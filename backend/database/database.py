@@ -9,7 +9,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from config.settings import settings
 
-engine = create_engine(settings.database_url)
+engine = create_engine(settings.get_database_url())
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()

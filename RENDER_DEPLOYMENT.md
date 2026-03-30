@@ -88,10 +88,12 @@ mysql://user:password@containers-us-west-xxx.railway.app:port/railway
 ### 2.3 Add Environment Variables in Railway
 ```
 DATABASE_URL=mysql://user:password@host:port/database
-SECRET_KEY=your-super-secret-production-key-change-this
+SECRET_KEY=your-super-secret-production-key-change-this-$(date +%s)
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 ```
+
+**Note**: Use the exact connection string Railway provides (starts with `mysql://`)
 
 ---
 
@@ -128,10 +130,12 @@ services:
 ### 3.3 Add Environment Variables in Render
 ```
 DATABASE_URL=mysql://railway-user:password@containers-us-west-xxx.railway.app:port/railway
-SECRET_KEY=your-super-secret-production-key-change-this
+SECRET_KEY=your-super-secret-production-key-change-this-$(date +%s)
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 ```
+
+**Important**: Use the exact Railway MySQL connection string (starts with `mysql://`) - the system will automatically convert it to `mysql+pymysql://` for SQLAlchemy.
 
 ### 3.4 Deploy Backend
 - Click **"Create Web Service"**
