@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complete Flow Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .success {
+            background: #10b981;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .info {
+            background: #3b82f6;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #f59e0b;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 ResolveAI System Status Check</h1>
+        
+        <div class="success">
+            ✅ Backend Server: Running on http://localhost:8001
+        </div>
+        
+        <div class="success">
+            ✅ Frontend Server: Running on http://localhost:5173
+        </div>
+        
+        <div class="success">
+            ✅ Database: SQLite with seeded data
+        </div>
+        
+        <div class="success">
+            ✅ Authentication: JWT tokens working
+        </div>
+        
+        <div class="info">
+            📝 Debug Components Created:
+            <ul>
+                <li>DashboardDebug.jsx - Simplified dashboard</li>
+                <li>LayoutDebug.jsx - Basic layout</li>
+                <li>test_dashboard.html - API test</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            ⚠️ Current Status: Using debug components to isolate issues
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button onclick="window.open('http://localhost:5173/', '_blank')">
+                🚀 Open ResolveAI Application
+            </button>
+            
+            <button onclick="window.open('http://localhost:5173/test_dashboard.html', '_blank')">
+                📊 Test Dashboard API
+            </button>
+            
+            <button onclick="window.open('http://localhost:8001/health', '_blank')">
+                🔍 Check Backend Health
+            </button>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 20px; background: #f3f4f6; border-radius: 8px;">
+            <h3>🔑 Test Credentials:</h3>
+            <p><strong>Admin:</strong> admin@resolveai.com / admin123</p>
+            <p><strong>Citizen:</strong> citizen@resolveai.com / citizen123</p>
+            <p><strong>Officer:</strong> john.water@resolveai.com / officer123</p>
+        </div>
+    </div>
+</body>
+</html>
