@@ -1,0 +1,9 @@
+services:
+  # Simple Web Service for testing
+  - type: web
+    name: resolveai-test
+    env: python
+    plan: free
+    buildCommand: "pip install -r simple_requirements.txt"
+    startCommand: "python simple_app.py"
+    healthCheckPath: /health
