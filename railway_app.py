@@ -2,17 +2,38 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import sys
 import os
+import traceback
 
 # Add backend to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'backend'))
+backend_path = os.path.join(os.path.dirname(__file__), 'backend')
+sys.path.insert(0, backend_path)
 
-# Import backend modules
+# Debug information
+print(f"Current working directory: {os.getcwd()}")
+print(f"Backend path: {backend_path}")
+print(f"Python path: {sys.path[:3]}")  # Show first 3 paths
+
+# Try to import backend modules with detailed error reporting
 try:
+    print("Attempting to import backend modules...")
+    
+    # Test if backend directory exists
+    if not os.path.exists(backend_path):
+        raise FileNotFoundError(f"Backend directory not found at: {backend_path}")
+    
+    # List backend contents
+    backend_files = os.listdir(backend_path)
+    print(f"Backend directory contents: {backend_files}")
+    
+    # Import modules
     from routes import auth, complaints, users, departments
     from database.database import engine, Base
     
+    print("✅ Backend modules imported successfully!")
+    
     # Create all database tables
     Base.metadata.create_all(bind=engine)
+    print("✅ Database tables created successfully!")
     
     app = FastAPI(
         title="ResolveAI - Smart Grievance System",
@@ -41,25 +62,61 @@ try:
     
     @app.get("/")
     async def root():
-        return {"message": "ResolveAI API is running on Railway with MySQL"}
+        return {"message": "ResolveAI API is running on Railway with MySQL", "status": "success"}
     
     @app.get("/health")
     async def health_check():
-        return {"status": "healthy", "service": "ResolveAI API", "database": "MySQL"}
+        return {"status": "healthy", "service": "ResolveAI API", "database": "MySQL", "backend": "connected"}
     
-except ImportError as e:
-    print(f"Import error: {e}")
-    print("Make sure all backend files are available")
-    # Create a minimal app for testing
-    app = FastAPI(title="ResolveAI Test")
+    @app.get("/debug")
+    async def debug_info():
+        return {
+            "working_directory": os.getcwd(),
+            "backend_path": backend_path,
+            "backend_exists": os.path.exists(backend_path),
+            "backend_files": backend_files if 'backend_files' in locals() else [],
+            "python_path": sys.path[:5],
+            "environment": os.getenv("RAILWAY_ENVIRONMENT", "unknown")
+        }
+    
+except Exception as e:
+    print(f"❌ Import error: {e}")
+    print(f"Full traceback: {traceback.format_exc()}")
+    
+    # Create a fallback app with detailed error info
+    app = FastAPI(title="ResolveAI Debug Mode")
     
     @app.get("/")
     async def root():
-        return {"message": "ResolveAI API - Import error occurred", "error": str(e)}
+        return {
+            "message": "ResolveAI API - Debug Mode", 
+            "error": str(e),
+            "traceback": traceback.format_exc(),
+            "working_directory": os.getcwd(),
+            "backend_path": backend_path,
+            "backend_exists": os.path.exists(backend_path)
+        }
     
     @app.get("/health")
     async def health_check():
-        return {"status": "error", "service": "ResolveAI API", "error": str(e)}
+        return {
+            "status": "error", 
+            "service": "ResolveAI API", 
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }
+    
+    @app.get("/debug")
+    async def debug_info():
+        return {
+            "error": str(e),
+            "traceback": traceback.format_exc(),
+            "working_directory": os.getcwd(),
+            "backend_path": backend_path,
+            "backend_exists": os.path.exists(backend_path),
+            "python_path": sys.path[:5],
+            "environment": os.getenv("RAILWAY_ENVIRONMENT", "unknown")
+        }
 
 if __name__ == "__main__":
     import uvicorn
